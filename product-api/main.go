@@ -8,8 +8,8 @@ import (
 	"os/signal"
 	"time"
 
-	"./data"
-	"./handlers"
+	"github.com/Akanibekuly/Microservices/product-api/data"
+	"github.com/Akanibekuly/Microservices/product-api/handlers"
 	"github.com/gorilla/mux"
 	"github.com/nicholasjackson/env"
 )

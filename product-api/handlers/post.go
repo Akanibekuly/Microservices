@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	"../data"
+	"github.com/Akanibekuly/Microservices/product-api/data"
 )
 
 // swagger:route POST /products products createProduct

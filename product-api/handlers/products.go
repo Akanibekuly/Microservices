@@ -1,17 +1,17 @@
-// Package classification of Product Api
+// Package classification if Product API
 //
-// Documantation for Product Api
+// Documentation for Product API
 //
-//	Schemes: http
-//	BasePath: /
-//	Version: 1.0.0
+//  Schemes: http
+//  BasePath: /
+//  Version: 1.0.0
 //
 //	Consumes:
-// 	~ application/json
-//
-//	Produces:
 //	~ application/json
-// swagger:meta
+//
+//  Produces:
+//  ~ application/json
+// swagger: meta
 
 package handlers
 
@@ -21,7 +21,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"../data"
+	"github.com/Akanibekuly/Microservices/product-api/data"
 	"github.com/gorilla/mux"
 )
 
