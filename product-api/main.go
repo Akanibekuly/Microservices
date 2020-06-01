@@ -8,7 +8,6 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/Akanibekuly/Microservices/product-api/data"
 	"github.com/Akanibekuly/Microservices/product-api/handlers"
 	"github.com/gorilla/mux"
 	"github.com/nicholasjackson/env"
@@ -21,29 +20,25 @@ func main() {
 	env.Parse()
 
 	l := log.New(os.Stdout, "products-api ", log.LstdFlags)
-	v := data.NewValidation()
 
 	// create the handlers
-	ph := handlers.NewProducts(l, v)
+	ph := handlers.NewProducts(l)
 
 	// create a new serve mux and register the handlers
 	sm := mux.NewRouter()
 
-	// handlers for API
-	getR := sm.Methods(http.MethodGet).Subrouter()
-	getR.HandleFunc("/products", ph.ListAll)
-	getR.HandleFunc("/products/{id:[0-9]+}", ph.ListSingle)
+	getRouter := sm.Methods(http.MethodGet).Subrouter()
+	getRouter.HandleFunc("/", ph.GetProducts)
 
-	putR := sm.Methods(http.MethodPut).Subrouter()
-	putR.HandleFunc("/products", ph.Update)
-	putR.Use(ph.MiddlewareValidateProduct)
+	putRouter := sm.Methods(http.MethodPut).Subrouter()
+	putRouter.HandleFunc("/{id:[0-9]+}", ph.UpdateProducts)
+	putRouter.Use(ph.MiddlewareValidateProduct)
 
-	postR := sm.Methods(http.MethodPost).Subrouter()
-	postR.HandleFunc("/products", ph.Create)
-	postR.Use(ph.MiddlewareValidateProduct)
+	postRouter := sm.Methods(http.MethodPost).Subrouter()
+	postRouter.HandleFunc("/", ph.AddProduct)
+	postRouter.Use(ph.MiddlewareValidateProduct)
 
-	deleteR := sm.Methods(http.MethodDelete).Subrouter()
-	deleteR.HandleFunc("/products/{id:[0-9]+}", ph.Delete)
+	//sm.Handle("/products", ph)
 
 	// create a new server
 	s := http.Server{

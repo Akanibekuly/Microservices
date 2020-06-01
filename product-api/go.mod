@@ -8,12 +8,11 @@ require (
 	github.com/go-openapi/spec v0.19.8 // indirect
 	github.com/go-openapi/swag v0.19.9 // indirect
 	github.com/go-openapi/validate v0.19.8 // indirect
-	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/go-swagger/go-swagger v0.23.0 // indirect
 	github.com/gorilla/mux v1.7.4
-	github.com/leodido/go-urn v1.2.0 // indirect
 	github.com/mitchellh/mapstructure v1.3.1 // indirect
+	github.com/nicholasjackson/building-microservices-youtube/product-api v0.0.0-20200531161151-79ee8a047cb1
 	github.com/nicholasjackson/env v0.6.0
 	github.com/pelletier/go-toml v1.8.0 // indirect
 	github.com/spf13/viper v1.7.0 // indirect
