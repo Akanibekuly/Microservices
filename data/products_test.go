@@ -2,13 +2,14 @@ package data
 
 import "testing"
 
-func TestCheckValidation(t *testing.T) {
+func TestChecksValidation(t *testing.T) {
 	p := &Product{
-		Name:  "nics",
-		Price: 1.00,
-		SKU:   "abs-abc-def",
+		Name:  "Nicks",
+		Price: 1.23,
+		SKU:   "abs-abc-defs",
 	}
 	err := p.Validate()
+
 	if err != nil {
 		t.Fatal(err)
 	}

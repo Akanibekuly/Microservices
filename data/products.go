@@ -10,7 +10,7 @@ import (
 	"github.com/go-playground/validator"
 )
 
-//Product is
+// Product defines the structure for an API product
 type Product struct {
 	ID          int     `json:"id"`
 	Name        string  `json:"name" validate:"required"`
@@ -22,51 +22,54 @@ type Product struct {
 	DeletedOn   string  `json:"-"`
 }
 
-//Products is
-type Products []*Product
-
-//GetProducts returns list of products
-func GetProducts() Products {
-	return productList
-}
-
-//ToJSON is
-func (p *Products) ToJSON(w io.Writer) error {
-	e := json.NewEncoder(w)
-	return e.Encode(p)
-}
-
 //FromJSON is
 func (p *Product) FromJSON(r io.Reader) error {
 	e := json.NewDecoder(r)
 	return e.Decode(p)
 }
 
-//Validate is
 func (p *Product) Validate() error {
 	validate := validator.New()
-	validate.RegisterValidation("sku", ValidateSKU)
+	validate.RegisterValidation("sku", validateSKU)
 	return validate.Struct(p)
 }
 
-//ValidateSKU is
-func ValidateSKU(fl validator.FieldLevel) bool {
-	// sku is of format abs-absd-dsfgd
-	re := regexp.MustCompile(`[a-z]+-[a-z]+-[a-z]+`)
+func validateSKU(fl validator.FieldLevel) bool {
+	//sku is of format abc-abs-defs
+	re := regexp.MustCompile(`[a-z]+-[a-z]+-[a-z]`)
 	matches := re.FindAllString(fl.Field().String(), -1)
+
 	if len(matches) != 1 {
 		return false
 	}
+
 	return true
 }
 
-//AddProduct adds new prod to array
+//Products is a collection of Product
+type Products []*Product
+
+// ToJSON serializes the contents of the collection to JSON
+// NewEncoder provides better performance than json.Unmarshal as it does not
+// have to buffer the output into an in memory slice of bytes
+// this reduces allocations and the overheads of the service
+//
+// https://golang.org/pkg/encoding/json/#NewEncoder
+func (p *Products) ToJSON(w io.Writer) error {
+	e := json.NewEncoder(w)
+	return e.Encode((p))
+}
+
+//GetProducts returns a list of Products
+func GetProducts() Products {
+	return productList
+}
+
 func AddProduct(p *Product) {
 	p.ID = getNextID()
 	productList = append(productList, p)
 }
 
-//UpdateProduct updates productList elenet by ID
 func UpdateProduct(id int, p *Product) error {
 	_, pos, err := findProduct(id)
 	if err != nil {
@@ -77,8 +80,7 @@ func UpdateProduct(id int, p *Product) error {
 	return nil
 }
 
-//ErrProductNotFound is
-var ErrProductNotFound = fmt.Errorf("Product not found")
+var ErrorProductNotFound = fmt.Errorf("Product Not Found")
 
 func findProduct(id int) (*Product, int, error) {
 	for i, p := range productList {
@@ -86,20 +88,21 @@ func findProduct(id int) (*Product, int, error) {
 			return p, i, nil
 		}
 	}
-	return nil, -1, ErrProductNotFound
+	return nil, -1, ErrorProductNotFound
 }
 
-//getNextID returns ID to the next prod
 func getNextID() int {
 	lp := productList[len(productList)-1]
 	return lp.ID + 1
 }
 
+// productList is a hard coded list of products for this
+// example data source
 var productList = []*Product{
 	&Product{
 		ID:          1,
 		Name:        "Latte",
-		Description: "Froothy milky coffee",
+		Description: "Frothy milky coffee",
 		Price:       2.45,
 		SKU:         "abc323",
 		CreatedOn:   time.Now().UTC().String(),
