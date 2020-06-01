@@ -10,6 +10,8 @@ import (
 // Returns a list of products
 // responses:
 //	201: noContent
+//	404: errorResponse
+//	501: errorResponse
 
 // Delete removes a product with the given id from the DB
 // if in not exists returns error not found
@@ -24,7 +26,7 @@ func (p *Products) Delete(rw http.ResponseWriter, r *http.Request) {
 
 		rw.WriteHeader(http.StatusNotFound)
 
-		// data.ToJSON(&GenericError{Message: err.Error(), rw})
+		data.ToJSON(&GenericError{Message: err.Error(), rw})
 		return
 	}
 
@@ -32,7 +34,7 @@ func (p *Products) Delete(rw http.ResponseWriter, r *http.Request) {
 		p.l.Println("[ERROR] deleting record", err)
 
 		rw.WriteHeader(http.StatusInternalServerError)
-		// data.ToJSON(&GenericError{Message: err.Error(), rw})
+		data.ToJSON(&GenericError{Message: err.Error(), rw})
 		return
 	}
 	rw.WriteHeader(http.StatusNoContent)
